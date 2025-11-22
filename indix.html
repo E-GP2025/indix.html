@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>e-GP Master AutoFill Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #003366;
+      color: #fff;
+      text-align: center;
+      padding: 15px 5px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 900px;
+      margin: 15px auto 40px;
+      padding: 10px;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .tabs button {
+      flex: 1;
+      min-width: 90px;
+      padding: 8px;
+      border: none;
+      cursor: pointer;
+      background: #e0e0e0;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+    .tabs button.active {
+      background: #003366;
+      color: #fff;
+    }
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.07);
+      margin-bottom: 15px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .field {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+    label {
+      font-size: 13px;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      padding: 7px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .btn-primary {
+      background: #003366;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: #00509e;
+    }
+    .output-box {
+      background: #eef3ff;
+      border-radius: 6px;
+      padding: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>e-GP Master AutoFill Tool</header>
+
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="ltm">LTM</button>
+      <button class="tab-btn" data-tab="otm">OTM</button>
+      <button class="tab-btn" data-tab="rfq">RFQ</button>
+    </div>
+
+    <!-- COMMON COMPANY INFO -->
+    <div class="card">
+      <h3>Company Information (সব টেন্ডারে কাজ করবে)</h3>
+      <div class="row">
+        <div class="field">
+          <label>Company Name</label>
+          <input id="companyName" placeholder="MS BISMIALLAH ENTERPRISE">
+        </div>
+        <div class="field">
+          <label>BIN Number</label>
+          <input id="bin" placeholder="00XXXXXXXX-0103">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Address</label>
+          <input id="address" placeholder="South Mohakhali, Munshiganj Sadar">
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input id="phone" placeholder="01XXXXXXXXX">
+        </div>
+      </div>
+    </div>
+
+    <!-- LTM FORM -->
+    <div id="tab-ltm" class="card">
+      <h3>LTM AutoFill</h3>
+      <div class="row">
+        <div class="field">
+          <label>Delivery Time</label>
+          <input id="ltmDelivery" placeholder="Within 7 (seven) days">
+        </div>
+        <div class="field">
+          <label>Tender Validity</label>
+          <input id="ltmValidity" placeholder="60 (sixty) days">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Extra Field 1 (Custom)</label>
+          <input id="ltmExtra1" placeholder="Payment will be made as per PPR-2008.">
+        </div>
+        <div class="field">
+          <label>Extra Field 2 (Custom)</label>
+          <input id="ltmExtra2" placeholder="All materials will be supplied as per specifications.">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="generateText('ltm')">Generate LTM Text</button>
+    </div>
+
+    <!-- OTM FORM -->
+    <div id="tab-otm" class="card" style="display:none;">
+      <h3>OTM AutoFill</h3>
+      <div class="row">
+        <div class="field">
+          <label>Delivery Time</label>
+          <input id="otmDelivery" placeholder="Within 30 (thirty) days">
+        </div>
+        <div class="field">
+          <label>Tender Validity</label>
+          <input id="otmValidity" placeholder="90 (ninety) days">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Extra Field 1 (Custom)</label>
+          <input id="otmExtra1" placeholder="All Government rules & PPR-2008 will be followed.">
+        </div>
+        <div class="field">
+          <label>Extra Field 2 (Custom)</label>
+          <input id="otmExtra2" placeholder="Work will be completed as per instruction of Engineer in charge.">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="generateText('otm')">Generate OTM Text</button>
+    </div>
+
+    <!-- RFQ FORM -->
+    <div id="tab-rfq" class="card" style="display:none;">
+      <h3>RFQ AutoFill</h3>
+      <div class="row">
+        <div class="field">
+          <label>Delivery Time</label>
+          <input id="rfqDelivery" placeholder="Within 3 (three) days">
+        </div>
+        <
